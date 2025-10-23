@@ -1,0 +1,6 @@
+streamlit
+python-docx
+pdfminer.six
+email-validator
+sendgrid==6.11.0
+
