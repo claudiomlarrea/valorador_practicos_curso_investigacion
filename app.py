@@ -425,8 +425,123 @@ def enviar_email(destinatario, asunto, mensaje_texto):
 # ---------------------------------
 # Interfaz Streamlit
 # ---------------------------------
-st.title("📑 Auto-corrección de Prácticos")
-st.write("Suba su archivo, elija el práctico y escriba el correo electrónico del alumno. Recibirá puntaje y explicaciones por criterio.")
+st.markdown(
+    """
+    <style>
+    :root {
+        --bg: #eef1f5;
+        --card: #ffffff;
+        --dark: #171a22;
+        --text: #1f2937;
+        --muted: #6b7280;
+        --green-1: #0d5b53;
+        --green-2: #0a7a64;
+        --green-soft: #e6f4ea;
+        --border: #dbe3ec;
+    }
+    .stApp {
+        background: radial-gradient(circle at top left, #f7f9fb 0%, var(--bg) 50%, #e5eaf0 100%);
+    }
+    .block-container {
+        max-width: 850px;
+        padding-top: 2.2rem;
+        padding-bottom: 2rem;
+    }
+    .hero {
+        border-radius: 14px;
+        padding: 1.25rem 1.5rem;
+        background: linear-gradient(110deg, var(--green-1), var(--green-2));
+        color: #fff;
+        box-shadow: 0 12px 28px rgba(15, 76, 66, 0.22);
+        margin-bottom: 0.9rem;
+    }
+    .hero h1 {
+        margin: 0;
+        font-size: 2rem;
+        line-height: 1.15;
+        font-weight: 800;
+    }
+    .hero p {
+        margin: 0.28rem 0 0;
+        opacity: 0.95;
+        font-size: 1rem;
+    }
+    .status {
+        border-radius: 10px;
+        background: var(--green-soft);
+        color: #14532d;
+        border: 1px solid #cce7d4;
+        padding: 0.65rem 0.9rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .intro-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1.1rem 1.2rem;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+        margin-bottom: 0.9rem;
+    }
+    .intro-card h2 {
+        margin: 0 0 0.45rem 0;
+        font-size: 1.65rem;
+        color: #111827;
+    }
+    .intro-card p {
+        margin: 0.2rem 0;
+        color: var(--muted);
+    }
+    .stTextInput label, .stSelectbox label, .stFileUploader label {
+        font-weight: 700 !important;
+        color: #111827 !important;
+    }
+    .stTextInput input, .stSelectbox div[data-baseweb="select"] > div {
+        border-radius: 10px !important;
+        border: 1px solid #2b2f3a !important;
+        background: #191b25 !important;
+        color: #f9fafb !important;
+        min-height: 44px;
+    }
+    .stFileUploader [data-testid="stFileUploaderDropzone"] {
+        border-radius: 10px;
+        border: 1px dashed #9ca3af;
+        background: #f8fafc;
+    }
+    .stButton > button {
+        border: 0;
+        border-radius: 10px;
+        background: linear-gradient(110deg, #0f766e, #14b8a6);
+        color: #fff;
+        font-weight: 800;
+        padding: 0.62rem 1.1rem;
+        box-shadow: 0 8px 18px rgba(15, 118, 110, 0.24);
+    }
+    .stButton > button:hover {
+        filter: brightness(1.03);
+        transform: translateY(-1px);
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    """
+    <section class="hero">
+        <h1>Universidad Católica de Cuyo</h1>
+        <p>Secretaría de Investigación</p>
+        <p>Consejo de Investigación</p>
+    </section>
+    <div class="status">✓ Conectado a Google Sheets (abrir)</div>
+    <section class="intro-card">
+        <h2>Sistema de gestión de temas para el Consejo de Investigación</h2>
+        <p>Complete solo los campos que correspondan.</p>
+        <p>El sistema genera un puntaje automático con desglose por criterios y envía el resultado al correo.</p>
+    </section>
+    """,
+    unsafe_allow_html=True,
+)
 
 correo = st.text_input("Correo electrónico del alumno")
 
@@ -438,7 +553,7 @@ practico_num = label_to_num[label_seleccionado]
 
 uploaded = st.file_uploader("Subir archivo (.docx o .pdf)", type=["docx", "pdf"])
 
-if st.button("Corregir y Enviar"):
+if st.button("Corregir y Enviar resultado"):
     if not uploaded or not correo:
         st.warning("Debe subir un archivo y un correo válido.")
     else:
