@@ -535,7 +535,7 @@ st.markdown(
     </section>
     <div class="status">✓ Conectado a Google Sheets (abrir)</div>
     <section class="intro-card">
-        <h2>Sistema de gestión de temas para el Consejo de Investigación</h2>
+        <h2>Sistema de evaluación de prácticos del Curso Metodología de la Investigación</h2>
         <p>Complete solo los campos que correspondan.</p>
         <p>El sistema genera un puntaje automático con desglose por criterios y envía el resultado al correo.</p>
     </section>
