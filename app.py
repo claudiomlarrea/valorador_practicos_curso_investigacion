@@ -1,5 +1,6 @@
 import streamlit as st
 import io, re, smtplib, ssl
+import base64
 from email.message import EmailMessage
 from pathlib import Path
 from docx import Document
@@ -455,6 +456,19 @@ st.markdown(
         box-shadow: 0 12px 28px rgba(15, 76, 66, 0.22);
         margin-bottom: 0.9rem;
     }
+    .hero-row {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    .hero-logo {
+        width: 90px;
+        height: 90px;
+        border-radius: 10px;
+        object-fit: cover;
+        background: rgba(255, 255, 255, 0.16);
+        padding: 4px;
+    }
     .hero h1 {
         margin: 0;
         font-size: 2rem;
@@ -465,15 +479,6 @@ st.markdown(
         margin: 0.28rem 0 0;
         opacity: 0.95;
         font-size: 1rem;
-    }
-    .status {
-        border-radius: 10px;
-        background: var(--green-soft);
-        color: #14532d;
-        border: 1px solid #cce7d4;
-        padding: 0.65rem 0.9rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
     }
     .intro-card {
         background: var(--card);
@@ -527,13 +532,17 @@ st.markdown(
 )
 
 st.markdown(
-    """
+    f"""
     <section class="hero">
-        <h1>Universidad Católica de Cuyo</h1>
-        <p>Secretaría de Investigación</p>
-        <p>Consejo de Investigación</p>
+        <div class="hero-row">
+            <img class="hero-logo" src="data:image/png;base64,{base64.b64encode(Path("assets/logo_uccuyo.png").read_bytes()).decode("utf-8")}" alt="Logo Universidad Católica de Cuyo" />
+            <div>
+                <h1>Universidad Católica de Cuyo</h1>
+                <p>Secretaría de Investigación</p>
+                <p>Consejo de Investigación</p>
+            </div>
+        </div>
     </section>
-    <div class="status">✓ Conectado a Google Sheets (abrir)</div>
     <section class="intro-card">
         <h2>Sistema de evaluación de prácticos del Curso Metodología de la Investigación</h2>
         <p>Complete solo los campos que correspondan.</p>
