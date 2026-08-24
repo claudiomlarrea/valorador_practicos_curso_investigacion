@@ -1,7 +1,7 @@
 
 # 📑 Auto-corrección de Prácticos – Metodología de la Investigación
 
-Aplicación en **Streamlit** para que los alumnos suban sus prácticos, se corrijan automáticamente según rúbrica básica y reciban sus notas y comentarios por correo electrónico.
+Aplicación en **Streamlit** para que los alumnos suban sus prácticos, se corrijan automáticamente según rúbrica básica y reciban sus notas y comentarios por correo electrónico. **La devolución se envía al correo de quien entrega y una copia a la cátedra.**
 
 ---
 
@@ -11,7 +11,15 @@ Aplicación en **Streamlit** para que los alumnos suban sus prácticos, se corri
 
 ```bash
 pip install -r requirements.txt
+```
 
+En Streamlit Cloud, configurar secretos:
+
+- `SENDGRID_API_KEY`, `SENDER_EMAIL`, `SENDER_NAME`, `REPLY_TO`
+- o fallback Gmail: `EMAIL_USER`, `EMAIL_PASS`
+- copia a la cátedra: `TEACHER_EMAIL` (recomendado) y/o `TEACHER_BCC`
+
+Si no hay `TEACHER_EMAIL` ni `TEACHER_BCC`, la copia va a `investigacion@uccuyo.edu.ar`.
 
 ## 🧪 Prácticos y rúbricas evaluadas
 
