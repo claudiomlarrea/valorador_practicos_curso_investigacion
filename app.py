@@ -651,15 +651,53 @@ div[data-testid="stDecoration"] {
     line-height: 1.6;
     font-size: 1.02rem;
 }
+label,
+[data-testid="stWidgetLabel"],
+[data-testid="stWidgetLabel"] *,
+[data-testid="stTextInput"] label,
+[data-testid="stSelectbox"] label,
+[data-testid="stFileUploader"] label,
+.stTextInput label,
+.stSelectbox label,
+.stFileUploader label,
+p, span, .stMarkdown, .stCaption {
+    color: #1f2937 !important;
+    -webkit-text-fill-color: #1f2937 !important;
+}
+.header-uccuyo h1.ucc-banner-heading,
+.header-uccuyo h2.ucc-banner-heading,
+.header-uccuyo h3.ucc-banner-heading {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+.ucc-intro-card h1.uc-card-main-title {
+    color: var(--ucc-heading-card) !important;
+    -webkit-text-fill-color: var(--ucc-heading-card) !important;
+}
+.ucc-intro-card p.uc-card-lead {
+    color: var(--ucc-lead-muted) !important;
+    -webkit-text-fill-color: var(--ucc-lead-muted) !important;
+}
 [data-testid="stTextInput"] input,
 [data-testid="stNumberInput"] input,
 [data-testid="stTextArea"] textarea {
     border-radius: 12px !important;
     border: 1px solid rgba(0, 82, 62, 0.22) !important;
     background-color: #ffffff !important;
-    color: var(--ucc-text) !important;
+    color: #1f2937 !important;
+    -webkit-text-fill-color: #1f2937 !important;
 }
-[data-baseweb="select"] > div:first-child { border-radius: 12px !important; }
+[data-baseweb="select"] > div,
+[data-baseweb="select"] > div:first-child {
+    border-radius: 12px !important;
+    background-color: #ffffff !important;
+    color: #1f2937 !important;
+}
+[data-baseweb="select"] span,
+[data-baseweb="select"] div {
+    color: #1f2937 !important;
+    -webkit-text-fill-color: #1f2937 !important;
+}
 [data-testid="stFileUploader"] section[data-testid="stFileUploaderDropzone"] {
     background-color: #1e1e1e !important;
     border-radius: 12px !important;
@@ -667,8 +705,10 @@ div[data-testid="stDecoration"] {
     padding: 0.85rem 1rem !important;
 }
 [data-testid="stFileUploader"] section[data-testid="stFileUploaderDropzone"] span,
-[data-testid="stFileUploader"] section[data-testid="stFileUploaderDropzone"] small {
+[data-testid="stFileUploader"] section[data-testid="stFileUploaderDropzone"] small,
+[data-testid="stFileUploader"] section[data-testid="stFileUploaderDropzone"] p {
     color: rgba(255, 255, 255, 0.92) !important;
+    -webkit-text-fill-color: rgba(255, 255, 255, 0.92) !important;
 }
 [data-testid="stBaseButton-primary"],
 [data-testid="stBaseButton-secondary"],
