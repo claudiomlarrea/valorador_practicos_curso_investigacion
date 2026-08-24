@@ -9,11 +9,45 @@ from email_validator import validate_email, EmailNotValidError
 
 # Copia por defecto a la cátedra si no hay secreto TEACHER_EMAIL / TEACHER_BCC.
 DEFAULT_TEACHER_EMAIL = "investigacion@uccuyo.edu.ar"
+_APP_DIR = Path(__file__).resolve().parent
+_ESCUDO_REMOTE_URL = (
+    "https://raw.githubusercontent.com/claudiomlarrea/valorador_informes_avances/"
+    "main/assets/escudo_uccuyo.png"
+)
+
+
+def _resolve_escudo_path():
+    assets = _APP_DIR / "assets"
+    if not assets.is_dir():
+        return None
+    for name in (
+        "escudo_uccuyo.png",
+        "escudo_uccuyo.jpg",
+        "escudo_uccuyo.jpeg",
+        "logo_uccuyo.png",
+    ):
+        p = assets / name
+        if p.is_file():
+            return p
+    return None
+
+
+def _escudo_src_for_inline_html() -> str:
+    p = _resolve_escudo_path()
+    if p is not None:
+        raw = p.read_bytes()
+        mime = "image/jpeg" if raw[:2] == b"\xff\xd8" else "image/png"
+        return f"data:{mime};base64,{base64.standard_b64encode(raw).decode('ascii')}"
+    return _ESCUDO_REMOTE_URL
+
 
 # ---------------------------------
 # Configuración
 # ---------------------------------
-st.set_page_config(page_title="Auto-corrección | Metodología", layout="centered")
+st.set_page_config(
+    page_title="Corrección de prácticos | Metodología",
+    layout="wide",
+)
 
 RUBRIC_MAX = {1: 100, 2: 100, 3: 100, 4: 100, 5: 100, 6: 100, 7: 100, 8: 100}
 
@@ -520,126 +554,165 @@ def enviar_email(destinatario, asunto, mensaje_texto):
 # ---------------------------------
 st.markdown(
     """
-    <style>
-    :root {
-        --bg: #eef1f5;
-        --card: #ffffff;
-        --dark: #171a22;
-        --text: #1f2937;
-        --muted: #6b7280;
-        --green-1: #0d5b53;
-        --green-2: #0a7a64;
-        --green-soft: #e6f4ea;
-        --border: #dbe3ec;
-    }
-    .stApp {
-        background: radial-gradient(circle at top left, #f7f9fb 0%, var(--bg) 50%, #e5eaf0 100%);
-    }
-    .block-container {
-        max-width: 850px;
-        padding-top: 2.2rem;
-        padding-bottom: 2rem;
-    }
-    .hero {
-        border-radius: 14px;
-        padding: 1.25rem 1.5rem;
-        background: linear-gradient(110deg, var(--green-1), var(--green-2));
-        color: #fff;
-        box-shadow: 0 12px 28px rgba(15, 76, 66, 0.22);
-        margin-bottom: 0.9rem;
-    }
-    .hero-row {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
-    .hero-logo {
-        width: 90px;
-        height: 90px;
-        border-radius: 10px;
-        object-fit: cover;
-        background: rgba(255, 255, 255, 0.16);
-        padding: 4px;
-    }
-    .hero h1 {
-        margin: 0;
-        font-size: 2rem;
-        line-height: 1.15;
-        font-weight: 800;
-    }
-    .hero p {
-        margin: 0.28rem 0 0;
-        opacity: 0.95;
-        font-size: 1rem;
-    }
-    .intro-card {
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        padding: 1.1rem 1.2rem;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-        margin-bottom: 0.9rem;
-    }
-    .intro-card h2 {
-        margin: 0 0 0.45rem 0;
-        font-size: 1.65rem;
-        color: #111827;
-    }
-    .intro-card p {
-        margin: 0.2rem 0;
-        color: var(--muted);
-    }
-    .stTextInput label, .stSelectbox label, .stFileUploader label {
-        font-weight: 700 !important;
-        color: #111827 !important;
-    }
-    .stTextInput input, .stSelectbox div[data-baseweb="select"] > div {
-        border-radius: 10px !important;
-        border: 1px solid #c5ced8 !important;
-        background: #ffffff !important;
-        color: #111827 !important;
-        min-height: 44px;
-    }
-    .stFileUploader [data-testid="stFileUploaderDropzone"] {
-        border-radius: 10px;
-        border: 1px dashed #9ca3af;
-        background: #f8fafc;
-    }
-    .stButton > button {
-        border: 0;
-        border-radius: 10px;
-        background: linear-gradient(110deg, #0f766e, #14b8a6);
-        color: #fff;
-        font-weight: 800;
-        padding: 0.62rem 1.1rem;
-        box-shadow: 0 8px 18px rgba(15, 118, 110, 0.24);
-    }
-    .stButton > button:hover {
-        filter: brightness(1.03);
-        transform: translateY(-1px);
-    }
-    </style>
+<style>
+:root {
+    --ucc-green: #00664d;
+    --ucc-green-dark: #00523e;
+    --ucc-green-dark: #00523e;
+    --ucc-accent: #28a745;
+    --ucc-page-bg: #E6E6E6;
+    --ucc-text: #262730;
+    --ucc-heading-card: #2c3838;
+    --ucc-lead-muted: #5f6b6f;
+}
+.stApp { background-color: var(--ucc-page-bg); }
+header[data-testid="stHeader"] {
+    background: var(--ucc-page-bg) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+div[data-testid="stDecoration"] {
+    height: 3px !important;
+    background: linear-gradient(90deg, var(--ucc-green-dark), var(--ucc-green), var(--ucc-green-dark)) !important;
+}
+.block-container {
+    padding-top: 2rem !important;
+    max-width: 920px;
+}
+.ucc-inst-header {
+    background: var(--ucc-green);
+    border-radius: 14px;
+    padding: 1.25rem 1.65rem;
+    margin-bottom: 1.35rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.35rem;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+}
+.ucc-inst-escudo {
+    width: 112px;
+    max-width: 28vw;
+    height: auto;
+    flex-shrink: 0;
+    display: block;
+    object-fit: contain;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+}
+.ucc-inst-banner-text {
+    flex: 1 1 240px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.header-uccuyo h1.ucc-banner-heading,
+.header-uccuyo h2.ucc-banner-heading,
+.header-uccuyo h3.ucc-banner-heading {
+    color: #ffffff !important;
+    margin: 0;
+    line-height: 1.2;
+    font-family: "Source Sans Pro", ui-sans-serif, system-ui, sans-serif;
+}
+.header-uccuyo h1.ucc-banner-heading {
+    font-size: clamp(1.35rem, 2.8vw, 1.95rem);
+    font-weight: 700;
+}
+.header-uccuyo h2.ucc-banner-heading {
+    margin-top: 0.55rem !important;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    font-weight: 500;
+}
+.header-uccuyo h3.ucc-banner-heading {
+    margin-top: 0.35rem !important;
+    font-size: clamp(0.85rem, 1.4vw, 1rem);
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.92) !important;
+}
+.ucc-intro-card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 1.75rem 2rem;
+    margin-bottom: 1.65rem;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.07), 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+.ucc-intro-card h1.uc-card-main-title {
+    color: var(--ucc-heading-card) !important;
+    margin: 0 0 0.75rem 0 !important;
+    font-size: clamp(1.3rem, 2.8vw, 1.85rem);
+    font-weight: 700;
+    line-height: 1.25;
+    font-family: "Source Sans Pro", ui-sans-serif, system-ui, sans-serif;
+}
+.ucc-intro-card p.uc-card-lead {
+    color: var(--ucc-lead-muted) !important;
+    margin: 0 !important;
+    line-height: 1.6;
+    font-size: 1.02rem;
+}
+[data-testid="stTextInput"] input,
+[data-testid="stNumberInput"] input,
+[data-testid="stTextArea"] textarea {
+    border-radius: 12px !important;
+    border: 1px solid rgba(0, 82, 62, 0.22) !important;
+    background-color: #ffffff !important;
+    color: var(--ucc-text) !important;
+}
+[data-baseweb="select"] > div:first-child { border-radius: 12px !important; }
+[data-testid="stFileUploader"] section[data-testid="stFileUploaderDropzone"] {
+    background-color: #1e1e1e !important;
+    border-radius: 12px !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    padding: 0.85rem 1rem !important;
+}
+[data-testid="stFileUploader"] section[data-testid="stFileUploaderDropzone"] span,
+[data-testid="stFileUploader"] section[data-testid="stFileUploaderDropzone"] small {
+    color: rgba(255, 255, 255, 0.92) !important;
+}
+[data-testid="stBaseButton-primary"],
+[data-testid="stBaseButton-secondary"],
+.stButton > button,
+[data-testid="stFileUploader"] button {
+    background-color: var(--ucc-green) !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+[data-testid="stBaseButton-primary"]:hover,
+[data-testid="stBaseButton-secondary"]:hover,
+.stButton > button:hover,
+[data-testid="stFileUploader"] button:hover {
+    background-color: var(--ucc-green-dark) !important;
+}
+[data-testid="stFileUploader"] button svg { fill: #ffffff !important; }
+</style>
     """,
     unsafe_allow_html=True,
 )
 
 st.markdown(
     f"""
-    <section class="hero">
-        <div class="hero-row">
-            <img class="hero-logo" src="data:image/png;base64,{base64.b64encode(Path("assets/logo_uccuyo.png").read_bytes()).decode("utf-8")}" alt="Logo Universidad Católica de Cuyo" />
-            <div>
-                <h1>Universidad Católica de Cuyo</h1>
-                <p>Secretaría de Investigación</p>
-                <p>Consejo de Investigación</p>
-            </div>
-        </div>
-    </section>
-    <section class="intro-card">
-        <h2>Sistema de evaluación de prácticos del Curso Metodología de la Investigación</h2>
-        <p>Complete solo los campos que correspondan.</p>
-        <p>El sistema genera un puntaje automático con desglose por criterios y envía la devolución al correo de quien envía el práctico y una copia a la cátedra.</p>
-    </section>
+<div class="ucc-inst-header header-uccuyo">
+<img class="ucc-inst-escudo" src="{_escudo_src_for_inline_html()}" alt="Universidad Católica de Cuyo" />
+<div class="ucc-inst-banner-text">
+<h1 class="ucc-banner-heading">Universidad Católica de Cuyo</h1>
+<h2 class="ucc-banner-heading">Secretaría de Investigación</h2>
+<h3 class="ucc-banner-heading">Consejo de Investigación</h3>
+</div>
+</div>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    """
+<div class="ucc-intro-card">
+<h1 class="uc-card-main-title">Corrección de prácticos — Metodología de la Investigación</h1>
+<p class="uc-card-lead">Subí el práctico (PDF o DOCX) para evaluarlo automáticamente según la rúbrica del curso. El resultado se envía a tu correo y una copia a la cátedra.</p>
+</div>
     """,
     unsafe_allow_html=True,
 )
@@ -652,7 +725,12 @@ label_seleccionado = st.selectbox("Práctico", opciones)
 label_to_num = {v: k for k, v in PRACTICO_LABELS.items()}
 practico_num = label_to_num[label_seleccionado]
 
-uploaded = st.file_uploader("Subir archivo (.docx o .pdf)", type=["docx", "pdf"])
+st.info("**Cargar archivo** — PDF o DOCX. Usá el recuadro oscuro abajo.")
+uploaded = st.file_uploader(
+    "Subir archivo (.docx o .pdf)",
+    type=["docx", "pdf"],
+    label_visibility="collapsed",
+)
 
 if st.button("Corregir y Enviar resultado"):
     if not uploaded or not correo:
