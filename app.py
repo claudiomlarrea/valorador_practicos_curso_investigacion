@@ -740,7 +740,6 @@ st.markdown(
 <div class="ucc-inst-banner-text">
 <h1 class="ucc-banner-heading">Universidad Católica de Cuyo</h1>
 <h2 class="ucc-banner-heading">Secretaría de Investigación</h2>
-<h3 class="ucc-banner-heading">Consejo de Investigación</h3>
 </div>
 </div>
     """,
